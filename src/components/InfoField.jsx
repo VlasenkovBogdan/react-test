@@ -18,7 +18,7 @@ constructor(props) {
                         <input type="text" className='xPos' id='xPos' onChange={this.handleChange} value= {this.props.xcor} />
                         </div>
                         <div>
-                        <div>Координата по оси х: </div>
+                        <div>Координата по оси y: </div>
                         <input type="text" className='yPos' id='yPos' onChange={this.handleChange} value={this.props.ycor} />
                         </div>
                         <div>
