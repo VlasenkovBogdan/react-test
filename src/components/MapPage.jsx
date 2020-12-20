@@ -399,6 +399,8 @@ class MyMap extends React.Component {
                     }
                     if (elem.x >= 100) {
                         elem.x = 100
+                    } else if (elem.x <= 0) {
+                        elem.x = 0
                     }
                 })
             };
@@ -413,6 +415,8 @@ class MyMap extends React.Component {
                     }
                     if (elem.y >= 100) {
                         elem.y = 100
+                    } else if (elem.y <= 0) {
+                        elem.y = 0
                     }
                 })
             };
@@ -434,16 +438,16 @@ class MyMap extends React.Component {
                     />
                 </div>
                 <div>
-                <div className='mapField'  >
-                    {this.renderMarks()}
-                    <img src={myMap} alt="myMap" key="mainMap" className='map' onClick={this.handleMouseClick} />
-                   
-                </div>
-                <div>
+                    <div className='mapField'  >
+                        {this.renderMarks()}
+                        <img src={myMap} alt="myMap" key="mainMap" className='map' onClick={this.handleMouseClick} />
+
+                    </div>
+                    <div>
                         <ExitButton />
                         <RemoveButton remove={this.removeButton} />
                     </div>
-                    </div>
+                </div>
             </div>
         )
     }
