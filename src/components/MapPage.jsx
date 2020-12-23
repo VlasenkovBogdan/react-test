@@ -1,9 +1,10 @@
 import React from 'react';
 import myMap from './myMap.svg';
 import marker from './marker.png';
-import ExitButton from './exitButton'
-import RemoveButton from './removeButton'
+import ExitButton from './exitButton';
+import RemoveButton from './removeButton';
 import InfoField from './InfoField';
+import ReactTooltip from 'react-tooltip';
 
 
 
@@ -287,15 +288,19 @@ class MyMap extends React.Component {
 
     }
     handleMouseClick(event) {
-        this.setState({ xcor: event.nativeEvent.offsetX });
-        this.setState({ ycor: event.nativeEvent.offsetY });
+        this.setState({
+            xcor: event.nativeEvent.offsetX,
+            ycor: event.nativeEvent.offsetY
+        });
         let amount = +prompt('Введите количество товара?')
         let name = prompt('Введите имя точки?')
         if (name === '' || name === null || amount === '' || amount === null || isNaN(amount)) {
             alert('Вы ввели данные неверно')
         } else {
-            this.setState({ name: name })
-            this.setState({ amount: amount })
+            this.setState({
+                name: name,
+                amount: amount
+            })
             let obj = {
                 "name": name,
                 "amount": amount,
@@ -309,6 +314,7 @@ class MyMap extends React.Component {
 
     }
     handleMouseOver(e) {
+
         this.state.data.forEach((elem, index) => {
             if (e.target.id === elem.x.toString() + elem.y.toString()) {
                 this.setState({
@@ -316,7 +322,7 @@ class MyMap extends React.Component {
                     xcor: elem.x,
                     ycor: elem.y,
                     name: elem.name,
-                    index: index
+                    index: index,
                 })
             }
         });
@@ -338,20 +344,29 @@ class MyMap extends React.Component {
         if (localStorage.getItem('obj')) {
             this.setState({ data: JSON.parse(localStorage.getItem('obj')) })
         }
+
     }
+    componentDidUpdate() {
+        ReactTooltip.rebuild()
+    }
+
     renderMarks() {
 
         return (
-            <div>{this.state.data.map((e) =>
-                <img src={marker}
-                    alt="marker"
-                    key={e.x.toString() + e.y.toString()}
-                    id={e.x.toString() + e.y.toString()}
-                    style={{ left: e.x * 10 - 3 + "px", top: e.y * 10 - 16 + "px", position: "absolute" }}
-                    className='marker'
-                    onMouseOver={this.handleMouseOver}
-                    onClick={this.removeMarkOnClick} />
-            )}</div>
+            <div>
+                <div>{this.state.data.map((e) =>
+                    <img src={marker}
+                        alt="marker"
+                        key={e.x.toString() + e.y.toString()}
+                        id={e.x.toString() + e.y.toString()}
+                        data-tip data-for='tooltip'
+                        style={{ left: e.x * 10 - 3 + "px", top: e.y * 10 - 16 + "px", position: "absolute" }}
+                        className='marker'
+                        onMouseOver={this.handleMouseOver}
+                        onClick={this.removeMarkOnClick} />
+                )}</div>
+
+            </div>
         )
 
 
@@ -440,12 +455,17 @@ class MyMap extends React.Component {
                 <div>
                     <div className='mapField'  >
                         {this.renderMarks()}
-                        <img src={myMap} alt="myMap" key="mainMap" className='map' onClick={this.handleMouseClick} />
+                        <img src={myMap} alt="myMap" key="mainMap" className='map' id='map' onClick={this.handleMouseClick} />
 
                     </div>
                     <div>
                         <ExitButton />
                         <RemoveButton remove={this.removeButton} />
+                        <ReactTooltip id='tooltip' place="top" effect="solid">
+                        name: {this.state.name}
+                            <br />
+                        amount: {this.state.amount}
+                        </ReactTooltip>
                     </div>
                 </div>
             </div>
